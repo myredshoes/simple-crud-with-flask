@@ -4,6 +4,7 @@ from flask import Flask
 from flask import render_template
 from flask import request
 from flask_sqlalchemy import SQLAlchemy
+from flask import redirect
 
 
 project_dir = os.path.dirname(os.path.abspath(__file__))
@@ -30,6 +31,16 @@ def home():
         db.session.commit()
     books = Book.query.all()
     return render_template("home.html", books=books)
+
+
+@app.route("/update", methods=["POST"])
+def update():
+    newtitle = request.form.get("newtitle")
+    oldtitle = request.form.get("oldtitle")
+    book = Book.query.filter_by(title=oldtitle).first()
+    book.title = newtitle
+    db.session.commit()
+    return redirect("/")
 
 
 if __name__ == "__main__":
