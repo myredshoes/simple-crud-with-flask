@@ -1,26 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<link>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>Title</title>
 </head>
 <body>
     <h1>Add book</h1>
     <form method="POST" action="/">
-      <input type="text" name="title">
-      <input type="submit" value="Add">
+      Title: <input type="text" name="title"><br>
+      Author: <input type="text" name="author"><br>
+        <input type="submit" value="Add">
     </form>
+
+    <hr>
+
     <h2>Books</h2>
     <table>
         {% for book in books %}
             <tr>
                 <td>
-                    {{book.title}}
+                    {{book.title}}, {{book.author}}
                 </td>
                 <td>
                     <form method="POST" action="./update" style="display: inline">
                         <input type="hidden" value="{{book.title}}" name="oldtitle">
                         <input type="text" value="{{book.title}}" name="newtitle">
+                        <input type="hidden" value="{{book.author}}" name="oldauthor">
+                        <input type="text" value="{{book.author}}" name="newauthor">
                         <input type="submit" value="Update">
 
                     </form>
@@ -28,6 +36,7 @@
                 <td>
                     <form method="POST" action="./delete" style="display: inline">
                         <input type="hidden" value="{{book.title}}" name="title">
+                        <input type="hidden" value="{{book.author}}" name="author">
                         <input type="submit" value="Delete">
                     </form>
                 </td>

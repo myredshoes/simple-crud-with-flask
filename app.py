@@ -18,9 +18,10 @@ db = SQLAlchemy(app)
 
 class Book(db.Model):
     title = db.Column(db.String(80), unique=True, nullable=False, primary_key=True)
+    author = db.Column(db.String(80), unique=False, nullable=False, index=True)
 
     def __repr__(self):
-        return "<Title: {}>".format(self.title)
+        return "<Title: {}>".format(self.title), "<Author: {}>".format(self.author)
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -28,7 +29,7 @@ def home():
     books = None
     if request.form:
         try:
-            book = Book(title=request.form.get("title"))
+            book = Book(title=request.form.get("title"), author=request.form.get("author"))
             db.session.add(book)
             db.session.commit()
         except Exception as e:
@@ -43,8 +44,11 @@ def update():
     try:
         newtitle = request.form.get("newtitle")
         oldtitle = request.form.get("oldtitle")
-        book = Book.query.filter_by(title=oldtitle).first()
+        newauthor = request.form.get("newauthor")
+        oldauthor = request.form.get("oldauthor")
+        book = Book.query.filter_by(title=oldtitle, author=oldauthor).first()
         book.title = newtitle
+        book.author = newauthor
         db.session.commit()
     except Exception as e:
         print("Couldn't update item title")
@@ -55,6 +59,7 @@ def update():
 @app.route("/delete", methods=["POST"])
 def delete():
     title = request.form.get("title")
+    author = request.form.get("author")
     book = Book.query.filter_by(title=title).first()
     db.session.delete(book)
     db.session.commit()
