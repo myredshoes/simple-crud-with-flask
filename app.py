@@ -60,7 +60,7 @@ def update():
 def delete():
     title = request.form.get("title")
     author = request.form.get("author")
-    book = Book.query.filter_by(title=title).first()
+    book = Book.query.filter_by(title=title, author=author).first()
     db.session.delete(book)
     db.session.commit()
     return redirect("/")
